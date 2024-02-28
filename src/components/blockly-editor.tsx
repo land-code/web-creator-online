@@ -7,7 +7,7 @@ import * as Blockly from 'blockly/core'
 import * as basicBlocks from 'blockly/blocks'
 import * as En from 'blockly/msg/en';
 import header from "@/elements/header"
-import { Abstract } from "blockly/core/events/events_abstract"
+import type { Abstract } from "blockly/core/events/events_abstract"
 
 const initialToolbox: Blockly.BlocklyOptions['toolbox'] = {
   "kind": "categoryToolbox",
@@ -63,12 +63,12 @@ export default function BlocklyEditor({ setHtml }: Props) {
     return () => {
       workspace.dispose()
     }
-  }, [])
+  }, [blocklyDivId, setHtml, htmlGenerator])
 
   useEffect(() => {
     addElement(header)
     return () => removeElement(header)
-  }, [workspace])
+  }, [workspace, addElement, removeElement])
 
   useEffect(() => {
     if (!workspace) return
@@ -100,7 +100,7 @@ export default function BlocklyEditor({ setHtml }: Props) {
     return () => {
       window.removeEventListener('resize', onresize);
     }
-  }, [workspace])
+  }, [workspace, blocklyAreaDivId, blocklyDivId])
 
   return (
     <div id={blocklyAreaDivId}>

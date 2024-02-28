@@ -1,7 +1,7 @@
 import './globals.css'
 
 import Header from "@/components/header";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: 'Web creator - A simple block web creator',

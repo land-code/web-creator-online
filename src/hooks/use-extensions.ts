@@ -28,20 +28,19 @@ export function useExtensions({ workspace }: Props) {
       }
     ])
 
-    // @ts-ignore
     htmlGenerator.forBlock[name] = generator
   }
 
   const removeElement = (element: typeof import('@/elements/header').default) => {
     const { name } = element
     Blockly.Blocks[name] = undefined
-    // @ts-ignore
+    // @ts-expect-error: Error
     setElements(elements => elements.filter(e => e.type !== name))
   }
 
   useEffect(() => {
     if (workspace === null) return
-    // @ts-ignore
+    // @ts-expect-error: Error
     const category = workspace.getToolbox().getToolboxItems()[0];
     category.updateFlyoutContents(elements);
   }, [elements])
