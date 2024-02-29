@@ -9,18 +9,7 @@ import * as En from 'blockly/msg/en';
 import header from "@/elements/header"
 import type { Abstract } from "blockly/core/events/events_abstract"
 import paragraph from "@/elements/paragraph"
-
-const initialToolbox: Blockly.BlocklyOptions['toolbox'] = {
-  "kind": "categoryToolbox",
-  "contents": [
-    {
-      kind: "category",
-      name: "Elements",
-      contents: [
-      ]
-    }
-  ]
-}
+import { initialToolbox } from "@/lib/initial-toolbox"
 
 interface Props {
   setHtml: React.Dispatch<React.SetStateAction<string>>
