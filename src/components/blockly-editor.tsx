@@ -72,11 +72,13 @@ export default function BlocklyEditor({ setHtml }: Props) {
   }, [blocklyDivId, setHtml, htmlGenerator])
 
   useEffect(() => {
-    addElement(header)
-    addElement(paragraph)
+    elements.forEach(element => {
+      addElement(element)
+    })
     return () => {
-      removeElement(header)
-      removeElement(paragraph)
+      elements.forEach(element => {
+        removeElement(element)
+      })
     }
   }, [workspace, addElement, removeElement])
 
