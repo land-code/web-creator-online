@@ -1,0 +1,16 @@
+{
+  "type": "paragraph",
+  "message0": "paragraph text %1",
+  "args0": [
+    {
+      "type": "field_input",
+      "name": "TEXT",
+      "text": "Welcome to the page"
+    }
+  ],
+  "previousStatement": "HTMLElement",
+  "nextStatement": "HTMLElement",
+  "colour": 230,
+  "tooltip": "Creates a paragraph in the page. The paragraph is a block-level element.",
+  "helpUrl": ""
+}

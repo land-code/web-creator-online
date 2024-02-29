@@ -8,6 +8,7 @@ import * as basicBlocks from 'blockly/blocks'
 import * as En from 'blockly/msg/en';
 import header from "@/elements/header"
 import type { Abstract } from "blockly/core/events/events_abstract"
+import paragraph from "@/elements/paragraph"
 
 const initialToolbox: Blockly.BlocklyOptions['toolbox'] = {
   "kind": "categoryToolbox",
@@ -24,6 +25,11 @@ const initialToolbox: Blockly.BlocklyOptions['toolbox'] = {
 interface Props {
   setHtml: React.Dispatch<React.SetStateAction<string>>
 }
+
+const elements = [
+  header,
+  paragraph,
+]
 
 export default function BlocklyEditor({ setHtml }: Props) {
   const [workspace, setWorkspace] = useState<Blockly.Workspace | null>(null)
@@ -67,7 +73,11 @@ export default function BlocklyEditor({ setHtml }: Props) {
 
   useEffect(() => {
     addElement(header)
-    return () => removeElement(header)
+    addElement(paragraph)
+    return () => {
+      removeElement(header)
+      removeElement(paragraph)
+    }
   }, [workspace, addElement, removeElement])
 
   useEffect(() => {
