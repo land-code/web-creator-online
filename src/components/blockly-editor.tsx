@@ -36,7 +36,7 @@ export default function BlocklyEditor({ setHtml }: Props) {
     if (!blocklyDiv) return
 
     Blockly.setLocale(En)
-    Blockly.defineBlocksWithJsonArray(basicBlocks.blocks)
+    Blockly.defineBlocksWithJsonArray(basicBlocks.blocks as [])
 
     const workspace = Blockly.inject(blocklyDiv, {
       toolbox: initialToolbox

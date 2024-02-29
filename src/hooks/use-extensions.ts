@@ -1,4 +1,7 @@
-import { Workspace } from "blockly";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { Workspace } from "blockly";
 import * as Blockly from 'blockly/core'
 import { useEffect, useState } from "react";
 
@@ -16,6 +19,7 @@ export function useExtensions({ workspace }: Props) {
     const { name, content, generator } = element
     Blockly.Blocks[name] = {
       init: function () {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         this.jsonInit(content)
       }
     }
@@ -27,8 +31,10 @@ export function useExtensions({ workspace }: Props) {
         type: name,
       }
     ])
-
-    htmlGenerator.forBlock[name] = generator
+    setHtmlGenerator(htmlGenerator => {
+      htmlGenerator.forBlock[name] = generator
+      return htmlGenerator
+    })
   }
 
   const removeElement = (element: typeof import('@/elements/header').default) => {
@@ -41,9 +47,9 @@ export function useExtensions({ workspace }: Props) {
   useEffect(() => {
     if (workspace === null) return
     // @ts-expect-error: Error
-    const category = workspace.getToolbox().getToolboxItems()[0];
+    const category = workspace.getToolbox().getToolboxItems()[0]
     category.updateFlyoutContents(elements);
-  }, [elements])
+  }, [elements, workspace])
 
   return {
     addElement,
