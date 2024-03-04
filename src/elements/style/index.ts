@@ -1,4 +1,4 @@
-import { Block, Generator } from 'blockly';
+import type { Block, Generator } from 'blockly';
 import styleJson from './style.json'
 
 function generator(block: Block, generator: Generator) {
