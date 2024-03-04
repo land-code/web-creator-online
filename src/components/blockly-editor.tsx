@@ -6,10 +6,12 @@ import { useExtensions } from '@/hooks/use-extensions'
 import * as Blockly from 'blockly/core'
 import * as basicBlocks from 'blockly/blocks'
 import * as En from 'blockly/msg/en';
-import header from "@/elements/header"
 import type { Abstract } from "blockly/core/events/events_abstract"
-import paragraph from "@/elements/paragraph"
 import { initialToolbox } from "@/lib/initial-toolbox"
+import header from "@/elements/header"
+import paragraph from "@/elements/paragraph"
+import style from "@/elements/style"
+import color from "@/elements/styles/color"
 
 interface Props {
   setHtml: React.Dispatch<React.SetStateAction<string>>
@@ -18,6 +20,8 @@ interface Props {
 const elements = [
   header,
   paragraph,
+  style,
+  color
 ]
 
 export default function BlocklyEditor({ setHtml }: Props) {
@@ -62,10 +66,12 @@ export default function BlocklyEditor({ setHtml }: Props) {
 
   useEffect(() => {
     elements.forEach(element => {
+      // @ts-expect-error: Element is not typed well
       addElement(element)
     })
     return () => {
       elements.forEach(element => {
+        // @ts-expect-error: Element is not typed well
         removeElement(element)
       })
     }
