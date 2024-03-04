@@ -2,7 +2,7 @@ import type { Block, Generator } from 'blockly';
 import styleJson from './style.json'
 
 function generator(block: Block, generator: Generator) {
-  const styleName = block.getFieldValue('STYLE_NAME');
+  const styleName = block.getFieldValue('STYLE_NAME') as string;
   const stylesStatements = generator.statementToCode(block, 'STYLES');
 
   const code = `
