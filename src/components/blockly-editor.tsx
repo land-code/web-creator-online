@@ -1,46 +1,45 @@
-'use client'
-import { useEffect, useId, useState } from "react"
+'use client';
+import { useEffect, useId, useState } from 'react';
 
-import { useExtensions } from '@/hooks/use-extensions'
+import { useExtensions } from '@/hooks/use-extensions';
 
-import * as Blockly from 'blockly/core'
-import * as basicBlocks from 'blockly/blocks'
+import * as Blockly from 'blockly/core';
+import * as basicBlocks from 'blockly/blocks';
 import * as En from 'blockly/msg/en';
-import type { Abstract } from "blockly/core/events/events_abstract"
-import { initialToolbox } from "@/lib/initial-toolbox"
-import header from "@/elements/header"
-import paragraph from "@/elements/paragraph"
-import style from "@/elements/style"
-import color from "@/elements/styles/color"
+import type { Abstract } from 'blockly/core/events/events_abstract';
+import { initialToolbox } from '@/lib/initial-toolbox';
+import header from '@/elements/header';
+import paragraph from '@/elements/paragraph';
+import style from '@/elements/style';
+import color from '@/elements/styles/color';
+import { useBlocklyResize } from '@/hooks/use-blockly-resize';
 
 interface Props {
-  setHtml: React.Dispatch<React.SetStateAction<string>>
+  setHtml: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const elements = [
-  header,
-  paragraph,
-  style,
-  color
-]
+const elements = [header, paragraph, style, color];
 
 export default function BlocklyEditor({ setHtml }: Props) {
-  const [workspace, setWorkspace] = useState<Blockly.Workspace | null>(null)
-  const blocklyAreaDivId = useId()
-  const blocklyDivId = useId()
-  const { addElement, removeElement, htmlGenerator } = useExtensions({ workspace })
+  const [workspace, setWorkspace] = useState<Blockly.Workspace | null>(null);
+  const blocklyAreaDivId = useId();
+  const blocklyDivId = useId();
+  const { addElement, removeElement, htmlGenerator } = useExtensions({
+    workspace,
+  });
+  useBlocklyResize({ workspace, blocklyAreaDivId, blocklyDivId });
 
   useEffect(() => {
-    const blocklyDiv = document.getElementById(blocklyDivId)
-    if (!blocklyDiv) return
+    const blocklyDiv = document.getElementById(blocklyDivId);
+    if (!blocklyDiv) return;
 
-    Blockly.setLocale(En)
-    Blockly.defineBlocksWithJsonArray(basicBlocks.blocks as [])
+    Blockly.setLocale(En);
+    Blockly.defineBlocksWithJsonArray(basicBlocks.blocks as []);
 
     const workspace = Blockly.inject(blocklyDiv, {
-      toolbox: initialToolbox
-    })
-    setWorkspace(workspace)
+      toolbox: initialToolbox,
+    });
+    setWorkspace(workspace);
 
     const supportedEvents = new Set([
       Blockly.Events.BLOCK_CHANGE,
@@ -54,64 +53,32 @@ export default function BlocklyEditor({ setHtml }: Props) {
       if (!supportedEvents.has(event.type)) return;
 
       const code = htmlGenerator.workspaceToCode(workspace);
-      setHtml(code)
+      setHtml(code);
     }
 
     workspace.addChangeListener(updateCode);
 
     return () => {
-      workspace.dispose()
-    }
-  }, [blocklyDivId, setHtml, htmlGenerator])
-
-  useEffect(() => {
-    elements.forEach(element => {
-      // @ts-expect-error: Element is not typed well
-      addElement(element)
-    })
-    return () => {
-      elements.forEach(element => {
-        // @ts-expect-error: Element is not typed well
-        removeElement(element)
-      })
-    }
-  }, [workspace, addElement, removeElement])
-
-  useEffect(() => {
-    if (!workspace) return
-
-    const blocklyArea = document.getElementById(blocklyAreaDivId)
-    const blocklyDiv = document.getElementById(blocklyDivId)
-    if (!blocklyArea || !blocklyDiv) return
-
-    const onresize = () => {
-      // Compute the absolute coordinates and dimensions of blocklyArea.
-      let element: HTMLElement | null = blocklyArea;
-      let x = 0;
-      let y = 0;
-      do {
-        x += element.offsetLeft;
-        y += element.offsetTop;
-        element = element.offsetParent as HTMLElement | null;
-      } while (element);
-      // Position blocklyDiv over blocklyArea.
-      blocklyDiv.style.left = x + 'px';
-      blocklyDiv.style.top = y + 'px';
-      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-      Blockly.svgResize(workspace as Blockly.WorkspaceSvg);
+      workspace.dispose();
     };
-    window.addEventListener('resize', onresize, false);
-    onresize();
+  }, [blocklyDivId, setHtml, htmlGenerator]);
 
+  useEffect(() => {
+    elements.forEach((element) => {
+      // @ts-expect-error: Element is not typed well
+      addElement(element);
+    });
     return () => {
-      window.removeEventListener('resize', onresize);
-    }
-  }, [workspace, blocklyAreaDivId, blocklyDivId])
+      elements.forEach((element) => {
+        // @ts-expect-error: Element is not typed well
+        removeElement(element);
+      });
+    };
+  }, [addElement, removeElement]);
 
   return (
     <div id={blocklyAreaDivId}>
       <div id={blocklyDivId} className="absolute" />
     </div>
-  )
+  );
 }

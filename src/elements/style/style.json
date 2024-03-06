@@ -16,8 +16,6 @@
       "check": "style"
     }
   ],
-  "previousStatement": "style",
-  "nextStatement": "style",
   "colour": 230,
   "tooltip": "",
   "helpUrl": ""
